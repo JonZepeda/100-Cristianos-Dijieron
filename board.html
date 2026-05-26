@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tablero de Juego - 100 Cristianos Dijeron</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/board.css">
+</head>
+<body>
+  <!-- Contenedor Principal del Juego -->
+  <div class="board-layout">
+    
+    <!-- Encabezado / Logo e Información de Ronda -->
+    <header class="board-header">
+      <div class="logo-area">
+        <span class="logo-main">100 Cristianos</span>
+        <span class="logo-sub">Dijeron</span>
+      </div>
+      <div class="round-panel" id="round-indicator">RONDA 1</div>
+    </header>
+
+    <!-- Marcador Central Superior (Puntaje de la Ronda) -->
+    <div class="score-center-container">
+      <div class="score-box round-accumulated">
+        <div class="score-label">PUNTOS EN JUEGO</div>
+        <div class="score-val" id="accumulated-points">000</div>
+      </div>
+    </div>
+
+    <!-- Área Principal de Juego (Equipos + Tablero) -->
+    <main class="board-main">
+      
+      <!-- Marcador Equipo A -->
+      <section class="team-panel team-a" id="team-a-panel">
+        <h2 class="team-name" id="team-a-name">GRUPO A</h2>
+        <div class="score-box team-score-box">
+          <div class="score-val glowing-points" id="team-a-score">000</div>
+        </div>
+        <div class="team-indicator" id="team-a-indicator">ESPERANDO</div>
+      </section>
+
+      <!-- Tablero de Respuestas (Grid de 3D Cards) -->
+      <section class="board-cards-grid" id="board-cards-container">
+        <!-- Generado dinámicamente en board.js -->
+      </section>
+
+      <!-- Marcador Equipo B -->
+      <section class="team-panel team-b" id="team-b-panel">
+        <h2 class="team-name" id="team-b-name">GRUPO B</h2>
+        <div class="score-box team-score-box">
+          <div class="score-val glowing-points" id="team-b-score">000</div>
+        </div>
+        <div class="team-indicator" id="team-b-indicator">ESPERANDO</div>
+      </section>
+
+    </main>
+
+    <!-- Pregunta Gigante en la Parte Inferior -->
+    <footer class="board-footer">
+      <div class="question-box glass-panel" id="question-text">
+        Cargando juego, por favor inicie la Consola del Presentador...
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Overlay para los Strikes (Grandes 'X' Rojas) -->
+  <div class="strikes-overlay" id="strikes-overlay">
+    <div class="strikes-wrapper" id="strikes-wrapper">
+      <!-- Ejemplo: <span class="strike-x">X</span> -->
+    </div>
+  </div>
+
+  <!-- Pantalla Completa Especial para DINERO RÁPIDO (Fast Money) -->
+  <div class="fast-money-overlay" id="fast-money-overlay">
+    <div class="fast-money-header">
+      <h2 class="logo-main" style="font-size: 3rem;">DINERO RÁPIDO</h2>
+      <div class="timer-container" id="fast-money-timer">20</div>
+    </div>
+    
+    <div class="fast-money-grid">
+      <!-- Columna Jugador 1 -->
+      <div class="fast-player-col" id="player-1-col">
+        <h3>JUGADOR 1</h3>
+        <div class="fast-rows-container" id="player-1-rows">
+          <!-- Filas generadas dinámicamente -->
+        </div>
+        <div class="fast-player-total">
+          <span>PUNTOS J1:</span>
+          <span class="fast-total-val" id="p1-total">0</span>
+        </div>
+      </div>
+      
+      <!-- Columna Jugador 2 -->
+      <div class="fast-player-col" id="player-2-col">
+        <h3>JUGADOR 2</h3>
+        <div class="fast-rows-container" id="player-2-rows">
+          <!-- Filas generadas dinámicamente -->
+        </div>
+        <div class="fast-player-total">
+          <span>PUNTOS J2:</span>
+          <span class="fast-total-val" id="p2-total">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Puntuación Global Acumulada Dinero Rápido -->
+    <div class="fast-money-grand-total">
+      <span>TOTAL ACUMULADO:</span>
+      <span class="grand-total-val" id="fast-grand-total">0</span>
+      <span>/ 200</span>
+    </div>
+  </div>
+
+  <!-- Importamos la lógica -->
+  <script src="js/audio.js"></script>
+  <script src="js/board.js"></script>
+</body>
+</html>

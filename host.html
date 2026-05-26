@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consola del Presentador - 100 Cristianos Dijeron</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/host.css">
+</head>
+<body>
+  
+  <div class="host-container">
+    
+    <!-- Barra Superior -->
+    <header class="host-header glass-panel">
+      <div class="header-title-area">
+        <h1>🎙️ Consola de Control</h1>
+        <span class="connection-status disconnected" id="connection-badge">Buscando Proyector...</span>
+      </div>
+      <div class="global-actions">
+        <button class="btn-premium btn-red" onclick="resetFullGame()">Reiniciar Todo</button>
+        <button class="btn-premium btn-cyan" onclick="openBoardTab()">Abrir Proyector</button>
+      </div>
+    </header>
+
+    <!-- Fila 1: Control de Equipos y Puntuación Global -->
+    <div class="host-row-two-cols">
+      
+      <!-- Equipo A Control -->
+      <div class="host-card glass-panel team-control-card border-a" id="host-team-a-panel">
+        <div class="team-header-input">
+          <input type="text" id="team-a-input-name" value="GRUPO A" onchange="syncState()">
+          <span class="active-dot" onclick="setActiveTeam('A')">🟢 Turno</span>
+        </div>
+        <div class="score-modifier-row">
+          <button class="btn-adjust" onclick="modifyScore('A', -10)">-10</button>
+          <input type="number" id="team-a-score-val" value="0" onchange="syncState()">
+          <button class="btn-adjust" onclick="modifyScore('A', 10)">+10</button>
+        </div>
+        <button class="btn-assign-accumulated btn-cyan-fill" onclick="assignAccumulatedTo('A')">Asignar Puntos de Ronda</button>
+      </div>
+
+      <!-- Puntos de la Ronda y Multiplicador -->
+      <div class="host-card glass-panel round-settings-card">
+        <h3>PUNTOS DE RONDA</h3>
+        <div class="accumulated-pool-display" id="accumulated-display">000</div>
+        
+        <div class="settings-row">
+          <div>
+            <label>Ronda Activa:</label>
+            <select id="round-select" onchange="onRoundChange()">
+              <option value="1">Ronda 1 (x1)</option>
+              <option value="2">Ronda 2 (x2)</option>
+              <option value="3">Ronda 3 (x3)</option>
+              <option value="4">Ronda 4 (x3)</option>
+            </select>
+          </div>
+          <button class="btn-adjust btn-gray" onclick="clearAccumulated()">Limpiar</button>
+        </div>
+      </div>
+
+      <!-- Equipo B Control -->
+      <div class="host-card glass-panel team-control-card border-b" id="host-team-b-panel">
+        <div class="team-header-input">
+          <input type="text" id="team-b-input-name" value="GRUPO B" onchange="syncState()">
+          <span class="active-dot" onclick="setActiveTeam('B')">🟢 Turno</span>
+        </div>
+        <div class="score-modifier-row">
+          <button class="btn-adjust" onclick="modifyScore('B', -10)">-10</button>
+          <input type="number" id="team-b-score-val" value="0" onchange="syncState()">
+          <button class="btn-adjust" onclick="modifyScore('B', 10)">+10</button>
+        </div>
+        <button class="btn-assign-accumulated btn-magenta-fill" onclick="assignAccumulatedTo('B')">Asignar Puntos de Ronda</button>
+      </div>
+
+    </div>
+
+    <!-- Fila 2: Selector de Preguntas y Control del Tablero Activo -->
+    <div class="host-row-main-deck">
+      
+      <!-- Panel de Control del Tablero (Pregunta y Respuestas) -->
+      <div class="host-card glass-panel active-game-card">
+        <div class="card-header-actions">
+          <h2>🎯 Juego en Curso</h2>
+          <div class="question-selector-area">
+            <select id="question-select-db">
+              <!-- Cargado desde database.js -->
+            </select>
+            <button class="btn-premium btn-cyan" style="padding: 6px 15px; font-size: 0.8rem;" onclick="loadSelectedQuestion()">Cargar Pregunta</button>
+          </div>
+        </div>
+
+        <div class="active-question-display" id="active-question-lbl">
+          Ninguna pregunta cargada. Por favor, selecciona una pregunta arriba y presiona "Cargar".
+        </div>
+
+        <div class="host-answers-list-header">
+          <span>RESPUESTA encuesta</span>
+          <span>PUNTOS</span>
+          <span>ACCIÓN</span>
+        </div>
+        
+        <div class="host-answers-list" id="host-answers-list-container">
+          <!-- Respuestas cargadas dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Panel Lateral de Acciones Rápidas (Strikes y Sonidos) -->
+      <div class="host-card glass-panel side-actions-card">
+        <h3>❌ CONTROL DE STRIKES</h3>
+        <div class="strikes-triggers">
+          <button class="btn-strike" onclick="triggerStrike(1)">1 Strike (X)</button>
+          <button class="btn-strike" onclick="triggerStrike(2)">2 Strikes (XX)</button>
+          <button class="btn-strike" onclick="triggerStrike(3)">3 Strikes (XXX)</button>
+        </div>
+
+        <h3 style="margin-top: 25px;">🎵 REPRODUCTOR DE EFECTOS</h3>
+        <div class="sounds-grid">
+          <button class="btn-sound" onclick="playHostSound('correct')">🔔 Ding (Correcto)</button>
+          <button class="btn-sound btn-sound-wrong" onclick="playHostSound('wrong')">🔕 Buzzer (Error)</button>
+          <button class="btn-sound btn-sound-win" onclick="playHostSound('win')">🎺 Fanfarria (Victoria)</button>
+          <button class="btn-sound" onclick="playHostSound('tick')">⏱️ Reloj (Tick)</button>
+        </div>
+
+        <h3 style="margin-top: 25px;">📝 GESTIÓN DE PREGUNTAS</h3>
+        <button class="btn-sound btn-gold" onclick="openDatabaseEditor()" style="width: 100%; border-radius: 8px; color: #000;">Abrir Editor de Preguntas</button>
+      </div>
+
+    </div>
+
+    <!-- Fila 3: MÓDULO DE DINERO RÁPIDO (FAST MONEY) -->
+    <div class="host-card glass-panel fast-money-control-panel">
+      <div class="fast-header">
+        <h2>💰 Consola de Control de "Dinero Rápido"</h2>
+        <div class="fast-actions">
+          <button class="btn-premium btn-magenta" onclick="toggleFastMoneyBoard(true)">Mostrar en Proyector</button>
+          <button class="btn-premium btn-red" onclick="toggleFastMoneyBoard(false)">Ocultar en Proyector</button>
+          <button class="btn-premium btn-gold" onclick="resetFastMoneyState()" style="color: #000;">Reiniciar Dinero Rápido</button>
+        </div>
+      </div>
+
+      <div class="fast-timer-controls">
+        <div class="timer-display-host" id="fast-timer-display">20 s</div>
+        <button class="btn-timer btn-start-t" onclick="startFastTimer()">Iniciar Reloj (20s)</button>
+        <button class="btn-timer btn-start-t" onclick="startFastTimer(25)" style="background: var(--accent-magenta);">Iniciar Reloj (25s)</button>
+        <button class="btn-timer btn-stop-t" onclick="stopFastTimer()">Pausar Reloj</button>
+        <button class="btn-timer btn-reset-t" onclick="resetFastTimer()">Reiniciar Reloj</button>
+      </div>
+
+      <div class="fast-players-host-inputs">
+        
+        <!-- Jugador 1 Control -->
+        <div class="player-input-column border-a">
+          <h3>JUGADOR 1</h3>
+          <div class="player-rows-inputs" id="p1-inputs-container">
+            <!-- 5 filas de entradas -->
+          </div>
+        </div>
+
+        <!-- Jugador 2 Control -->
+        <div class="player-input-column border-b">
+          <h3>JUGADOR 2</h3>
+          <div class="player-rows-inputs" id="p2-inputs-container">
+            <!-- 5 filas de entradas -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL: EDITOR DE PREGUNTAS (CREACIÓN DINÁMICA) -->
+  <div class="db-editor-modal" id="db-editor-modal">
+    <div class="db-editor-content glass-panel">
+      <div class="db-editor-header">
+        <h2>Base de Datos de Preguntas</h2>
+        <button class="btn-close-modal" onclick="closeDatabaseEditor()">✖</button>
+      </div>
+      
+      <div class="db-editor-body">
+        
+        <!-- Crear Nueva Pregunta -->
+        <div class="editor-section-new">
+          <h3>➕ Agregar Nueva Pregunta de Encuesta</h3>
+          <div class="editor-form-group">
+            <label>Categoría:</label>
+            <input type="text" id="new-q-category" placeholder="Ej. Vida en la Iglesia">
+          </div>
+          <div class="editor-form-group">
+            <label>Pregunta:</label>
+            <input type="text" id="new-q-text" placeholder="Ej. Nombra algo que encuentras en...">
+          </div>
+          
+          <label style="margin-top: 10px; display: block; font-weight: bold;">Respuestas y Puntuaciones (Máx. 5):</label>
+          <div class="answers-inputs-grid">
+            <input type="text" id="new-q-a1" placeholder="Respuesta 1 (Popular)">
+            <input type="number" id="new-q-p1" placeholder="Puntos 1">
+
+            <input type="text" id="new-q-a2" placeholder="Respuesta 2">
+            <input type="number" id="new-q-p2" placeholder="Puntos 2">
+
+            <input type="text" id="new-q-a3" placeholder="Respuesta 3">
+            <input type="number" id="new-q-p3" placeholder="Puntos 3">
+
+            <input type="text" id="new-q-a4" placeholder="Respuesta 4">
+            <input type="number" id="new-q-p4" placeholder="Puntos 4">
+
+            <input type="text" id="new-q-a5" placeholder="Respuesta 5">
+            <input type="number" id="new-q-p5" placeholder="Puntos 5">
+          </div>
+          
+          <button class="btn-premium btn-cyan" onclick="saveNewQuestion()" style="width: 100%; margin-top: 15px;">Guardar Pregunta en Base de Datos</button>
+        </div>
+
+        <hr style="margin: 20px 0; border: none; border-top: 1px dashed rgba(255,255,255,0.1);">
+
+        <!-- Listado de Preguntas Existentes con opción de borrar -->
+        <div class="editor-section-list">
+          <h3>📋 Preguntas en Sistema</h3>
+          <div class="questions-scroll-list" id="editor-questions-list">
+            <!-- Cargado dinámicamente -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Cargamos bases de datos y scripts de control -->
+  <script src="js/audio.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/host.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Configuraciones de editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

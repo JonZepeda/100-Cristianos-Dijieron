@@ -1,0 +1,96 @@
+/* ESTILOS COMUNES Y COMPONENTES REUTILIZABLES */
+
+body {
+  background: radial-gradient(circle at center, #141935 0%, var(--bg-deep) 100%);
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Efecto Vidrio (Glassmorphism) */
+.glass-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Botón Premium Brillante */
+.btn-premium {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-premium::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+  transform: skewX(-25deg);
+  transition: 0.75s;
+  pointer-events: none;
+}
+
+.btn-premium:hover::after {
+  left: 120%;
+}
+
+.btn-cyan {
+  background: linear-gradient(135deg, #00b4db, #00f0ff);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+}
+.btn-cyan:hover {
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+}
+
+.btn-magenta {
+  background: linear-gradient(135deg, #d80073, var(--accent-magenta));
+  border: 1px solid rgba(255, 0, 127, 0.4);
+}
+.btn-magenta:hover {
+  box-shadow: var(--glow-magenta);
+  transform: translateY(-2px);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #d4af37, var(--accent-gold));
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: #000;
+}
+.btn-gold:hover {
+  box-shadow: var(--glow-gold);
+  transform: translateY(-2px);
+}
+
+.btn-red {
+  background: linear-gradient(135deg, #d32f2f, var(--accent-red));
+  border: 1px solid rgba(255, 51, 68, 0.4);
+}
+.btn-red:hover {
+  box-shadow: var(--glow-red);
+  transform: translateY(-2px);
+}
+
+

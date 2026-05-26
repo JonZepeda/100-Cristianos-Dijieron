@@ -1,0 +1,51 @@
+/* SISTEMA DE DISEÑO - VARIABLES DE CSS */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Outfit:wght@300;400;600;800;900&display=swap');
+
+:root {
+  /* Paleta de Colores de Fondo */
+  --bg-deep: #070913;
+  --bg-surface: #0f1225;
+  --bg-card: #171c35;
+  --bg-glass: rgba(15, 18, 37, 0.7);
+  --border-glass: rgba(255, 255, 255, 0.08);
+
+  /* Acentos de Neón y Luces */
+  --accent-gold: #ffd700;
+  --accent-cyan: #00f0ff;
+  --accent-magenta: #ff007f;
+  --accent-red: #ff3344;
+  --accent-green: #39ff14;
+  --text-white: #ffffff;
+  --text-muted: #8b9bb4;
+
+  /* Sombras y Resplandores (Neon Glows) */
+  --glow-cyan: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2);
+  --glow-gold: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.2);
+  --glow-magenta: 0 0 10px rgba(255, 0, 127, 0.5), 0 0 20px rgba(255, 0, 127, 0.2);
+  --glow-red: 0 0 10px rgba(255, 51, 68, 0.6), 0 0 25px rgba(255, 51, 68, 0.3);
+  --glow-green: 0 0 10px rgba(57, 255, 20, 0.6), 0 0 20px rgba(57, 255, 20, 0.2);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  /* Fuentes del Sistema */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+
+  /* Transiciones Suaves */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-white);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
