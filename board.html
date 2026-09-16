@@ -3,12 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tablero de Juego - 100 Cristianos Dijeron</title>
+  <title>Tablero de Proyección - 100 Cristianos Dijeron 🎙️</title>
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/board.css">
 </head>
 <body>
+  <!-- Canvas para Confeti de Celebración -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Banner Flotante de Desbloqueo de Audio (si aún no se ha interactuado) -->
+  <div class="audio-banner" id="audio-unlock-banner" onclick="unlockAudio()">
+    <span>🔊 Haz clic en cualquier lugar para activar el sonido del Proyector</span>
+  </div>
+
   <!-- Contenedor Principal del Juego -->
   <div class="board-layout">
     
@@ -18,7 +26,14 @@
         <span class="logo-main">100 Cristianos</span>
         <span class="logo-sub">Dijeron</span>
       </div>
-      <div class="round-panel" id="round-indicator">RONDA 1</div>
+
+      <div class="header-center-info">
+        <div class="round-panel" id="round-indicator">RONDA 1</div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-icon-fullscreen" onclick="toggleFullScreen()" title="Pantalla Completa (F11)">⛶</button>
+      </div>
     </header>
 
     <!-- Marcador Central Superior (Puntaje de la Ronda) -->
@@ -32,27 +47,43 @@
     <!-- Área Principal de Juego (Equipos + Tablero) -->
     <main class="board-main">
       
-      <!-- Marcador Equipo A -->
+      <!-- Marcador y Podio Equipo A -->
       <section class="team-panel team-a" id="team-a-panel">
+        <div class="podium-glow"></div>
         <h2 class="team-name" id="team-a-name">GRUPO A</h2>
         <div class="score-box team-score-box">
           <div class="score-val glowing-points" id="team-a-score">000</div>
         </div>
         <div class="team-indicator" id="team-a-indicator">ESPERANDO</div>
+        
+        <!-- Indicadores de Strikes en Podio -->
+        <div class="podium-strikes" id="team-a-strikes">
+          <span class="podium-x" id="team-a-x1">X</span>
+          <span class="podium-x" id="team-a-x2">X</span>
+          <span class="podium-x" id="team-a-x3">X</span>
+        </div>
       </section>
 
-      <!-- Tablero de Respuestas (Grid de 3D Cards) -->
+      <!-- Tablero Central de Respuestas (Persianas 3D) -->
       <section class="board-cards-grid" id="board-cards-container">
         <!-- Generado dinámicamente en board.js -->
       </section>
 
-      <!-- Marcador Equipo B -->
+      <!-- Marcador y Podio Equipo B -->
       <section class="team-panel team-b" id="team-b-panel">
+        <div class="podium-glow"></div>
         <h2 class="team-name" id="team-b-name">GRUPO B</h2>
         <div class="score-box team-score-box">
           <div class="score-val glowing-points" id="team-b-score">000</div>
         </div>
         <div class="team-indicator" id="team-b-indicator">ESPERANDO</div>
+
+        <!-- Indicadores de Strikes en Podio -->
+        <div class="podium-strikes" id="team-b-strikes">
+          <span class="podium-x" id="team-b-x1">X</span>
+          <span class="podium-x" id="team-b-x2">X</span>
+          <span class="podium-x" id="team-b-x3">X</span>
+        </div>
       </section>
 
     </main>
@@ -60,61 +91,86 @@
     <!-- Pregunta Gigante en la Parte Inferior -->
     <footer class="board-footer">
       <div class="question-box glass-panel" id="question-text">
-        Cargando juego, por favor inicie la Consola del Presentador...
+        ¡Bienvenidos! Esperando inicio desde la Consola del Presentador...
       </div>
     </footer>
 
   </div>
 
-  <!-- Overlay para los Strikes (Grandes 'X' Rojas) -->
+  <!-- Overlay para los Strikes (Grandes 'X' Rojas Impactantes) -->
   <div class="strikes-overlay" id="strikes-overlay">
+    <div class="strike-flash"></div>
     <div class="strikes-wrapper" id="strikes-wrapper">
-      <!-- Ejemplo: <span class="strike-x">X</span> -->
+      <!-- Generado dinámicamente con animación elástica -->
     </div>
   </div>
 
   <!-- Pantalla Completa Especial para DINERO RÁPIDO (Fast Money) -->
   <div class="fast-money-overlay" id="fast-money-overlay">
     <div class="fast-money-header">
-      <h2 class="logo-main" style="font-size: 3rem;">DINERO RÁPIDO</h2>
-      <div class="timer-container" id="fast-money-timer">20</div>
+      <div class="fast-logo-badge">
+        <span class="logo-main" style="font-size: 2.4rem;">DINERO RÁPIDO</span>
+        <span class="fast-sub-title">RONDA FINAL DECISIVA</span>
+      </div>
+
+      <!-- Cronómetro con Indicador Circular -->
+      <div class="timer-display-wrapper">
+        <div class="timer-container" id="fast-money-timer">20</div>
+      </div>
     </div>
     
     <div class="fast-money-grid">
       <!-- Columna Jugador 1 -->
-      <div class="fast-player-col" id="player-1-col">
-        <h3>JUGADOR 1</h3>
+      <div class="fast-player-col player-1-theme" id="player-1-col">
+        <div class="player-col-header">
+          <span class="player-badge">PRIMER TURNO</span>
+          <h3>JUGADOR 1</h3>
+        </div>
         <div class="fast-rows-container" id="player-1-rows">
           <!-- Filas generadas dinámicamente -->
         </div>
         <div class="fast-player-total">
-          <span>PUNTOS J1:</span>
+          <span>TOTAL JUGADOR 1:</span>
           <span class="fast-total-val" id="p1-total">0</span>
         </div>
       </div>
       
       <!-- Columna Jugador 2 -->
-      <div class="fast-player-col" id="player-2-col">
-        <h3>JUGADOR 2</h3>
+      <div class="fast-player-col player-2-theme" id="player-2-col">
+        <div class="player-col-header">
+          <span class="player-badge">SEGUNDO TURNO</span>
+          <h3>JUGADOR 2</h3>
+        </div>
         <div class="fast-rows-container" id="player-2-rows">
           <!-- Filas generadas dinámicamente -->
         </div>
         <div class="fast-player-total">
-          <span>PUNTOS J2:</span>
+          <span>TOTAL JUGADOR 2:</span>
           <span class="fast-total-val" id="p2-total">0</span>
         </div>
       </div>
     </div>
 
-    <!-- Puntuación Global Acumulada Dinero Rápido -->
-    <div class="fast-money-grand-total">
-      <span>TOTAL ACUMULADO:</span>
-      <span class="grand-total-val" id="fast-grand-total">0</span>
-      <span>/ 200</span>
+    <!-- Puntuación Global Acumulada con Barra de Meta hacia 200 Puntos -->
+    <div class="fast-money-footer-panel">
+      <div class="fast-progress-wrapper">
+        <div class="fast-progress-labels">
+          <span>PUNTOS TOTALES ACUMULADOS</span>
+          <span class="fast-goal-label">META: 200 PUNTOS</span>
+        </div>
+        <div class="fast-progress-track">
+          <div class="fast-progress-bar" id="fast-progress-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="fast-money-grand-total">
+        <span class="grand-total-val" id="fast-grand-total">0</span>
+        <span class="grand-total-max">/ 200</span>
+      </div>
     </div>
   </div>
 
-  <!-- Importamos la lógica -->
+  <!-- Importamos la biblioteca de sonido y la lógica del tablero -->
   <script src="js/audio.js"></script>
   <script src="js/board.js"></script>
 </body>

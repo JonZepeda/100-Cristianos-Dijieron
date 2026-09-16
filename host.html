@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consola del Presentador - 100 Cristianos Dijeron</title>
+  <title>Consola del Presentador - 100 Cristianos Dijeron 🎙️</title>
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/host.css">
@@ -12,15 +12,29 @@
   
   <div class="host-container">
     
-    <!-- Barra Superior -->
+    <!-- Barra Superior de Control de Producción -->
     <header class="host-header glass-panel">
       <div class="header-title-area">
-        <h1>🎙️ Consola de Control</h1>
-        <span class="connection-status disconnected" id="connection-badge">Buscando Proyector...</span>
+        <div class="host-title-badge">
+          <h1>🎙️ Consola del Presentador</h1>
+          <span class="connection-status disconnected" id="connection-badge">Buscando Proyector...</span>
+        </div>
       </div>
-      <div class="global-actions">
-        <button class="btn-premium btn-red" onclick="resetFullGame()">Reiniciar Todo</button>
-        <button class="btn-premium btn-cyan" onclick="openBoardTab()">Abrir Proyector</button>
+
+      <!-- Controles de Audio y Acciones Globales -->
+      <div class="header-tools-area">
+        <!-- Control de Volumen Master -->
+        <div class="volume-control-box">
+          <button class="btn-mute" id="btn-mute-toggle" onclick="toggleHostMute()" title="Silenciar / Activar Audio">🔊</button>
+          <input type="range" id="host-volume-slider" min="0" max="1" step="0.05" value="0.85" oninput="changeHostVolume(this.value)" title="Volumen Master">
+        </div>
+
+        <div class="global-actions">
+          <button class="btn-tool" onclick="openHotkeysModal()" title="Ver Atajos de Teclado">⌨️ Atajos</button>
+          <button class="btn-tool" onclick="triggerHostConfetti()" title="Lanzar Confeti al Proyector">🎉 Confeti</button>
+          <button class="btn-premium btn-red" onclick="resetFullGame()">Reiniciar Todo</button>
+          <button class="btn-premium btn-cyan" onclick="openBoardTab()">Abrir Proyector</button>
+        </div>
       </div>
     </header>
 
@@ -31,23 +45,30 @@
       <div class="host-card glass-panel team-control-card border-a" id="host-team-a-panel">
         <div class="team-header-input">
           <input type="text" id="team-a-input-name" value="GRUPO A" onchange="syncState()">
-          <span class="active-dot" onclick="setActiveTeam('A')">🟢 Turno</span>
+          <button class="active-dot" id="dot-team-a" onclick="setActiveTeam('A')" title="Atajo: Tecla A">
+            🟢 Turno <span class="hotkey-mini">A</span>
+          </button>
         </div>
+        
         <div class="score-modifier-row">
           <button class="btn-adjust" onclick="modifyScore('A', -10)">-10</button>
           <input type="number" id="team-a-score-val" value="0" onchange="syncState()">
           <button class="btn-adjust" onclick="modifyScore('A', 10)">+10</button>
+          <button class="btn-adjust btn-quick-add" onclick="modifyScore('A', 50)">+50</button>
         </div>
-        <button class="btn-assign-accumulated btn-cyan-fill" onclick="assignAccumulatedTo('A')">Asignar Puntos de Ronda</button>
+        
+        <button class="btn-assign-accumulated btn-cyan-fill" onclick="assignAccumulatedTo('A')" title="Atajo: Tecla Espacio (si Equipo A activo)">
+          Asignar Puntos de Ronda
+        </button>
       </div>
 
-      <!-- Puntos de la Ronda y Multiplicador -->
+      <!-- Puntos de la Ronda y Multiplicador Central -->
       <div class="host-card glass-panel round-settings-card">
         <h3>PUNTOS DE RONDA</h3>
         <div class="accumulated-pool-display" id="accumulated-display">000</div>
         
         <div class="settings-row">
-          <div>
+          <div class="round-select-wrapper">
             <label>Ronda Activa:</label>
             <select id="round-select" onchange="onRoundChange()">
               <option value="1">Ronda 1 (x1)</option>
@@ -56,7 +77,7 @@
               <option value="4">Ronda 4 (x3)</option>
             </select>
           </div>
-          <button class="btn-adjust btn-gray" onclick="clearAccumulated()">Limpiar</button>
+          <button class="btn-adjust btn-gray" onclick="clearAccumulated()" title="Poner en 0 acumulados">Limpiar</button>
         </div>
       </div>
 
@@ -64,14 +85,21 @@
       <div class="host-card glass-panel team-control-card border-b" id="host-team-b-panel">
         <div class="team-header-input">
           <input type="text" id="team-b-input-name" value="GRUPO B" onchange="syncState()">
-          <span class="active-dot" onclick="setActiveTeam('B')">🟢 Turno</span>
+          <button class="active-dot" id="dot-team-b" onclick="setActiveTeam('B')" title="Atajo: Tecla B">
+            🟢 Turno <span class="hotkey-mini">B</span>
+          </button>
         </div>
+        
         <div class="score-modifier-row">
           <button class="btn-adjust" onclick="modifyScore('B', -10)">-10</button>
           <input type="number" id="team-b-score-val" value="0" onchange="syncState()">
           <button class="btn-adjust" onclick="modifyScore('B', 10)">+10</button>
+          <button class="btn-adjust btn-quick-add" onclick="modifyScore('B', 50)">+50</button>
         </div>
-        <button class="btn-assign-accumulated btn-magenta-fill" onclick="assignAccumulatedTo('B')">Asignar Puntos de Ronda</button>
+        
+        <button class="btn-assign-accumulated btn-magenta-fill" onclick="assignAccumulatedTo('B')" title="Atajo: Tecla Espacio (si Equipo B activo)">
+          Asignar Puntos de Ronda
+        </button>
       </div>
 
     </div>
@@ -82,49 +110,78 @@
       <!-- Panel de Control del Tablero (Pregunta y Respuestas) -->
       <div class="host-card glass-panel active-game-card">
         <div class="card-header-actions">
-          <h2>🎯 Juego en Curso</h2>
-          <div class="question-selector-area">
-            <select id="question-select-db">
-              <!-- Cargado desde database.js -->
+          <div class="deck-title-wrap">
+            <h2>🎯 Juego en Curso</h2>
+            <span class="deck-subtitle" id="active-category-pill">SIN CATEGORÍA</span>
+          </div>
+          
+          <!-- Filtro de Categoría y Buscador en Vivo -->
+          <div class="question-search-filters">
+            <select id="category-filter-select" onchange="onCategoryFilterChange()">
+              <option value="ALL">Todas las Categorías</option>
             </select>
-            <button class="btn-premium btn-cyan" style="padding: 6px 15px; font-size: 0.8rem;" onclick="loadSelectedQuestion()">Cargar Pregunta</button>
+
+            <input type="text" id="question-search-input" placeholder="🔍 Buscar pregunta..." oninput="onSearchQuestions()">
+
+            <select id="question-select-db">
+              <!-- Cargado dinámicamente desde database.js -->
+            </select>
+
+            <button class="btn-premium btn-cyan btn-sm" onclick="loadSelectedQuestion()">Cargar</button>
+            <button class="btn-premium btn-gold btn-sm" onclick="loadRandomQuestion()" title="Cargar pregunta al azar">🎲 Azar</button>
           </div>
         </div>
 
         <div class="active-question-display" id="active-question-lbl">
-          Ninguna pregunta cargada. Por favor, selecciona una pregunta arriba y presiona "Cargar".
+          Ninguna pregunta cargada. Selecciona una pregunta del selector o presiona "🎲 Azar" para comenzar.
         </div>
 
         <div class="host-answers-list-header">
-          <span>RESPUESTA encuesta</span>
+          <span>RESPUESTA DE ENCUESTA</span>
           <span>PUNTOS</span>
-          <span>ACCIÓN</span>
+          <span>ACCIÓN [TECLA]</span>
         </div>
         
         <div class="host-answers-list" id="host-answers-list-container">
-          <!-- Respuestas cargadas dinámicamente -->
+          <!-- Respuestas cargadas dinámicamente con botones de revelar -->
         </div>
       </div>
 
       <!-- Panel Lateral de Acciones Rápidas (Strikes y Sonidos) -->
       <div class="host-card glass-panel side-actions-card">
-        <h3>❌ CONTROL DE STRIKES</h3>
+        <div class="side-section-header">
+          <h3>❌ CONTROL DE STRIKES</h3>
+          <button class="btn-mini-clear" onclick="clearStrikesOnBoard()" title="Limpiar marcas de strike en podios">Limpiar</button>
+        </div>
+        
         <div class="strikes-triggers">
-          <button class="btn-strike" onclick="triggerStrike(1)">1 Strike (X)</button>
-          <button class="btn-strike" onclick="triggerStrike(2)">2 Strikes (XX)</button>
-          <button class="btn-strike" onclick="triggerStrike(3)">3 Strikes (XXX)</button>
+          <button class="btn-strike" onclick="triggerStrike(1)">
+            1 Strike (X) <span class="hotkey-tag">X</span>
+          </button>
+          <button class="btn-strike" onclick="triggerStrike(2)">
+            2 Strikes (XX) <span class="hotkey-tag">Shift+X</span>
+          </button>
+          <button class="btn-strike" onclick="triggerStrike(3)">
+            3 Strikes (XXX) <span class="hotkey-tag">Alt+X</span>
+          </button>
         </div>
 
-        <h3 style="margin-top: 25px;">🎵 REPRODUCTOR DE EFECTOS</h3>
+        <h3 style="margin-top: 22px;">🎵 EFECTOS DE SONIDO</h3>
         <div class="sounds-grid">
           <button class="btn-sound" onclick="playHostSound('correct')">🔔 Ding (Correcto)</button>
           <button class="btn-sound btn-sound-wrong" onclick="playHostSound('wrong')">🔕 Buzzer (Error)</button>
           <button class="btn-sound btn-sound-win" onclick="playHostSound('win')">🎺 Fanfarria (Victoria)</button>
           <button class="btn-sound" onclick="playHostSound('tick')">⏱️ Reloj (Tick)</button>
+          <button class="btn-sound" onclick="playHostSound('whoosh')">💨 Whoosh (Carta)</button>
+          <button class="btn-sound btn-sound-confetti" onclick="triggerHostConfetti()">🎉 Confeti</button>
         </div>
 
-        <h3 style="margin-top: 25px;">📝 GESTIÓN DE PREGUNTAS</h3>
-        <button class="btn-sound btn-gold" onclick="openDatabaseEditor()" style="width: 100%; border-radius: 8px; color: #000;">Abrir Editor de Preguntas</button>
+        <h3 style="margin-top: 22px;">📋 GESTIÓN DE PREGUNTAS</h3>
+        <div class="db-actions-quick">
+          <button class="btn-sound btn-gold" onclick="openDatabaseEditor()" style="width: 100%; border-radius: 8px; color: #000; font-weight: 800;">
+            Editor de Preguntas (<span id="total-q-count">0</span>)
+          </button>
+        </div>
       </div>
 
     </div>
@@ -132,7 +189,19 @@
     <!-- Fila 3: MÓDULO DE DINERO RÁPIDO (FAST MONEY) -->
     <div class="host-card glass-panel fast-money-control-panel">
       <div class="fast-header">
-        <h2>💰 Consola de Control de "Dinero Rápido"</h2>
+        <div class="fast-header-left">
+          <h2>💰 Consola de "Dinero Rápido"</h2>
+          <span class="fast-badge-status">Ronda Final</span>
+        </div>
+
+        <!-- Selector de Paquete de Preguntas para Dinero Rápido -->
+        <div class="fast-set-selector-wrap">
+          <label>Guion de Preguntas:</label>
+          <select id="fast-set-select" onchange="onFastSetChange()">
+            <!-- Sets cargados de database.js -->
+          </select>
+        </div>
+
         <div class="fast-actions">
           <button class="btn-premium btn-magenta" onclick="toggleFastMoneyBoard(true)">Mostrar en Proyector</button>
           <button class="btn-premium btn-red" onclick="toggleFastMoneyBoard(false)">Ocultar en Proyector</button>
@@ -140,9 +209,14 @@
         </div>
       </div>
 
+      <!-- Guion de Preguntas en Pantalla para que el presentador lea fácilmente -->
+      <div class="fast-questions-script-box" id="fast-questions-script-box">
+        <!-- 5 preguntas del set seleccionado -->
+      </div>
+
       <div class="fast-timer-controls">
         <div class="timer-display-host" id="fast-timer-display">20 s</div>
-        <button class="btn-timer btn-start-t" onclick="startFastTimer()">Iniciar Reloj (20s)</button>
+        <button class="btn-timer btn-start-t" onclick="startFastTimer(20)">Iniciar Reloj (20s)</button>
         <button class="btn-timer btn-start-t" onclick="startFastTimer(25)" style="background: var(--accent-magenta);">Iniciar Reloj (25s)</button>
         <button class="btn-timer btn-stop-t" onclick="stopFastTimer()">Pausar Reloj</button>
         <button class="btn-timer btn-reset-t" onclick="resetFastTimer()">Reiniciar Reloj</button>
@@ -152,7 +226,10 @@
         
         <!-- Jugador 1 Control -->
         <div class="player-input-column border-a">
-          <h3>JUGADOR 1</h3>
+          <div class="player-col-header">
+            <h3>JUGADOR 1</h3>
+            <button class="btn-quick-zero-all" onclick="quickZeroRemaining('player1')" title="Llenar casillas vacías con 0">Ceros rápidos</button>
+          </div>
           <div class="player-rows-inputs" id="p1-inputs-container">
             <!-- 5 filas de entradas -->
           </div>
@@ -160,7 +237,10 @@
 
         <!-- Jugador 2 Control -->
         <div class="player-input-column border-b">
-          <h3>JUGADOR 2</h3>
+          <div class="player-col-header">
+            <h3>JUGADOR 2</h3>
+            <button class="btn-quick-zero-all" onclick="quickZeroRemaining('player2')" title="Llenar casillas vacías con 0">Ceros rápidos</button>
+          </div>
           <div class="player-rows-inputs" id="p2-inputs-container">
             <!-- 5 filas de entradas -->
           </div>
@@ -171,59 +251,93 @@
 
   </div>
 
-  <!-- MODAL: EDITOR DE PREGUNTAS (CREACIÓN DINÁMICA) -->
+  <!-- MODAL: EDITOR DE PREGUNTAS (CREACIÓN DINÁMICA, EXPORT/IMPORT) -->
   <div class="db-editor-modal" id="db-editor-modal">
-    <div class="db-editor-content glass-panel">
+    <div class="db-editor-content glass-panel-heavy">
       <div class="db-editor-header">
-        <h2>Base de Datos de Preguntas</h2>
+        <h2>📚 Base de Datos y Gestor de Preguntas</h2>
         <button class="btn-close-modal" onclick="closeDatabaseEditor()">✖</button>
       </div>
       
       <div class="db-editor-body">
         
-        <!-- Crear Nueva Pregunta -->
+        <!-- Crear Nueva Pregunta con 3 a 8 Respuestas Flexibles -->
         <div class="editor-section-new">
           <h3>➕ Agregar Nueva Pregunta de Encuesta</h3>
-          <div class="editor-form-group">
-            <label>Categoría:</label>
-            <input type="text" id="new-q-category" placeholder="Ej. Vida en la Iglesia">
-          </div>
-          <div class="editor-form-group">
-            <label>Pregunta:</label>
-            <input type="text" id="new-q-text" placeholder="Ej. Nombra algo que encuentras en...">
+          <div class="editor-form-row">
+            <div class="editor-form-group" style="flex: 1;">
+              <label>Categoría:</label>
+              <input type="text" id="new-q-category" placeholder="Ej. Personajes Bíblicos / Vida en la Iglesia">
+            </div>
+            <div class="editor-form-group" style="flex: 2;">
+              <label>Pregunta:</label>
+              <input type="text" id="new-q-text" placeholder="Ej. Nombra un personaje de la Biblia que...">
+            </div>
           </div>
           
-          <label style="margin-top: 10px; display: block; font-weight: bold;">Respuestas y Puntuaciones (Máx. 5):</label>
-          <div class="answers-inputs-grid">
-            <input type="text" id="new-q-a1" placeholder="Respuesta 1 (Popular)">
-            <input type="number" id="new-q-p1" placeholder="Puntos 1">
+          <div class="answers-editor-header">
+            <label>Respuestas y Puntuaciones (Mínimo 3, Máximo 8):</label>
+            <div class="answers-count-btns">
+              <button class="btn-count-adjust" onclick="addAnswerRow()">+ Casilla</button>
+              <button class="btn-count-adjust" onclick="removeAnswerRow()">- Casilla</button>
+            </div>
+          </div>
 
-            <input type="text" id="new-q-a2" placeholder="Respuesta 2">
-            <input type="number" id="new-q-p2" placeholder="Puntos 2">
-
-            <input type="text" id="new-q-a3" placeholder="Respuesta 3">
-            <input type="number" id="new-q-p3" placeholder="Puntos 3">
-
-            <input type="text" id="new-q-a4" placeholder="Respuesta 4">
-            <input type="number" id="new-q-p4" placeholder="Puntos 4">
-
-            <input type="text" id="new-q-a5" placeholder="Respuesta 5">
-            <input type="number" id="new-q-p5" placeholder="Puntos 5">
+          <div class="answers-dynamic-list" id="new-q-answers-container">
+            <!-- Filas dinámicas de respuestas -->
           </div>
           
           <button class="btn-premium btn-cyan" onclick="saveNewQuestion()" style="width: 100%; margin-top: 15px;">Guardar Pregunta en Base de Datos</button>
         </div>
 
-        <hr style="margin: 20px 0; border: none; border-top: 1px dashed rgba(255,255,255,0.1);">
+        <hr class="editor-divider">
 
-        <!-- Listado de Preguntas Existentes con opción de borrar -->
+        <!-- Herramientas de Respaldo e Importación/Exportación -->
+        <div class="editor-tools-row">
+          <button class="btn-tool-secondary" onclick="exportQuestionsJSON()">💾 Exportar Preguntas (JSON)</button>
+          
+          <label class="btn-tool-secondary" style="cursor: pointer;">
+            📥 Importar Preguntas (JSON)
+            <input type="file" id="import-json-file" accept=".json" style="display: none;" onchange="importQuestionsJSON(event)">
+          </label>
+
+          <button class="btn-tool-secondary btn-danger-soft" onclick="confirmResetDatabase()">↺ Restaurar Preguntas de Fábrica</button>
+        </div>
+
+        <hr class="editor-divider">
+
+        <!-- Listado de Preguntas Existentes con opción de búsqueda y borrado -->
         <div class="editor-section-list">
-          <h3>📋 Preguntas en Sistema</h3>
+          <div class="list-search-header">
+            <h3>📋 Preguntas en Sistema (<span id="modal-q-count">0</span>)</h3>
+            <input type="text" id="modal-search-input" placeholder="Filtrar lista..." oninput="renderEditorQuestionsList()">
+          </div>
           <div class="questions-scroll-list" id="editor-questions-list">
             <!-- Cargado dinámicamente -->
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GUÍA DE ATAJOS DE TECLADO (HOTKEYS) -->
+  <div class="db-editor-modal" id="hotkeys-modal">
+    <div class="db-editor-content glass-panel-heavy" style="max-width: 580px;">
+      <div class="db-editor-header">
+        <h2>⌨️ Atajos de Teclado para el Show en Vivo</h2>
+        <button class="btn-close-modal" onclick="closeHotkeysModal()">✖</button>
+      </div>
+      <div class="hotkeys-modal-body">
+        <div class="hotkey-entry"><span class="key-badge">1 - 8</span><span>Revelar Respuesta 1 a 8 en el proyector</span></div>
+        <div class="hotkey-entry"><span class="key-badge">X</span><span>Disparar 1 Strike (X) con zumbador</span></div>
+        <div class="hotkey-entry"><span class="key-badge">Shift + X</span><span>Disparar 2 Strikes (XX)</span></div>
+        <div class="hotkey-entry"><span class="key-badge">Alt + X</span><span>Disparar 3 Strikes (XXX)</span></div>
+        <div class="hotkey-entry"><span class="key-badge">A</span><span>Activar turno del GRUPO A</span></div>
+        <div class="hotkey-entry"><span class="key-badge">B</span><span>Activar turno del GRUPO B</span></div>
+        <div class="hotkey-entry"><span class="key-badge">Espacio</span><span>Asignar puntos de la ronda al equipo en turno</span></div>
+        <div class="hotkey-entry"><span class="key-badge">M</span><span>Silenciar / Activar audio general</span></div>
+        <div class="hotkey-entry"><span class="key-badge">C</span><span>Lanzar lluvia de confeti en el proyector</span></div>
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>100 Cristianos Dijeron - Juego Familiar para Iglesias</title>
+  <title>100 Cristianos Dijeron 🎙️ - Juego Familiar para Iglesias</title>
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/main.css">
   <style>
@@ -13,134 +13,196 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 30px 20px;
       text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .title-area {
+      margin-bottom: 25px;
     }
 
     .logo-glow {
       font-family: var(--font-display);
-      font-weight: 900;
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 950;
+      font-size: clamp(2.8rem, 9vw, 5.2rem);
       text-transform: uppercase;
       letter-spacing: -2px;
-      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-magenta) 50%, var(--accent-gold) 100%);
+      background: linear-gradient(135deg, #00f0ff 0%, #ffd000 50%, #ff007f 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 5px;
-      filter: drop-shadow(0 2px 20px rgba(0,240,255,0.25));
-      animation: pulse-glow 3s infinite alternate;
+      margin-bottom: 4px;
+      filter: drop-shadow(0 4px 25px rgba(0, 240, 255, 0.35));
+      animation: pulse-glow 3.5s infinite alternate;
     }
 
     .sub-logo {
       font-family: var(--font-display);
-      font-size: clamp(1rem, 3vw, 1.8rem);
-      font-weight: 600;
+      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+      font-weight: 800;
       color: var(--accent-gold);
       text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 40px;
+      letter-spacing: 6px;
       text-shadow: var(--glow-gold);
     }
 
     .selection-box {
       width: 100%;
-      max-width: 650px;
-      padding: 40px;
+      max-width: 720px;
+      padding: 40px 35px;
       margin-bottom: 30px;
     }
 
     .selection-title {
       font-family: var(--font-display);
       font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 25px;
-      color: var(--text-white);
+      font-weight: 800;
+      margin-bottom: 28px;
+      color: #fff;
     }
 
     .role-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 24px;
     }
 
-    @media (min-width: 600px) {
+    @media (min-width: 640px) {
       .role-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
 
     .role-card {
-      padding: 30px 20px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 15px;
+      padding: 35px 24px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
       cursor: pointer;
       transition: all var(--transition-medium);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
     }
 
     .role-card:hover {
-      background: rgba(255,255,255,0.05);
-      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateY(-6px);
     }
 
     .role-card.presenter:hover {
       border-color: var(--accent-magenta);
-      box-shadow: 0 10px 25px rgba(255, 0, 127, 0.15);
+      box-shadow: 0 14px 35px rgba(255, 0, 127, 0.25), var(--shadow-card);
     }
 
     .role-card.projector:hover {
       border-color: var(--accent-cyan);
-      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.15);
+      box-shadow: 0 14px 35px rgba(0, 240, 255, 0.25), var(--shadow-card);
     }
 
     .role-icon {
-      font-size: 3rem;
+      font-size: 3.5rem;
       transition: transform var(--transition-medium);
     }
 
     .role-card:hover .role-icon {
-      transform: scale(1.15) rotate(5deg);
+      transform: scale(1.18) rotate(4deg);
     }
 
     .role-name {
       font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.3rem;
+      font-weight: 900;
+      font-size: 1.45rem;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .role-desc {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Guía rápida de 3 pasos */
+    .quick-guide-box {
+      width: 100%;
+      max-width: 720px;
+      padding: 24px;
+      background: rgba(10, 14, 32, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    .guide-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--accent-gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .guide-steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 600px) {
+      .guide-steps {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.82rem;
+      color: var(--text-bright);
       line-height: 1.4;
     }
 
+    .step-num {
+      font-family: var(--font-display);
+      font-weight: 900;
+      color: var(--accent-cyan);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
     .footer {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      margin-top: 20px;
     }
 
     @keyframes pulse-glow {
       0% {
-        filter: drop-shadow(0 2px 10px rgba(0,240,255,0.2));
+        filter: drop-shadow(0 4px 15px rgba(0, 240, 255, 0.3));
       }
       100% {
-        filter: drop-shadow(0 2px 30px rgba(255,0,127,0.4));
+        filter: drop-shadow(0 4px 35px rgba(255, 0, 127, 0.5));
       }
     }
   </style>
 </head>
 <body>
   <div class="welcome-container">
-    <h1 class="logo-glow">100 Cristianos</h1>
-    <h2 class="sub-logo">Dijeron</h2>
+    <div class="title-area">
+      <h1 class="logo-glow">100 Cristianos</h1>
+      <h2 class="sub-logo">Dijeron</h2>
+    </div>
     
-    <div class="selection-box glass-panel">
+    <div class="selection-box glass-panel-heavy">
       <h3 class="selection-title">Selecciona el modo de pantalla para iniciar</h3>
       
       <div class="role-grid">
@@ -148,31 +210,49 @@
         <div class="role-card presenter" onclick="openRole('host.html')">
           <div class="role-icon">🎙️</div>
           <div class="role-name" style="color: var(--accent-magenta);">Presentador</div>
-          <p class="role-desc">Abre la Consola de Control en tu pantalla/tableta. Permite ver respuestas, strikes, preguntas y controlar el proyector.</p>
-          <button class="btn-premium btn-magenta" style="padding: 8px 20px; font-size: 0.85rem; margin-top: 10px;">Consola Host</button>
+          <p class="role-desc">Consola de Control para tu laptop o tablet. Controla preguntas, respuestas, atajos rápidos de teclado y strikes.</p>
+          <button class="btn-premium btn-magenta" style="padding: 10px 24px; font-size: 0.9rem; margin-top: 6px;">Consola Host</button>
         </div>
 
         <!-- Tarjeta de Proyección -->
         <div class="role-card projector" onclick="openRole('board.html')">
           <div class="role-icon">🖥️</div>
           <div class="role-name" style="color: var(--accent-cyan);">Tablero</div>
-          <p class="role-desc">Abre el Tablero de Juego gigante para arrastrar al proyector o TV principal. El público verá las respuestas y marcadores.</p>
-          <button class="btn-premium btn-cyan" style="padding: 8px 20px; font-size: 0.85rem; margin-top: 10px;">Proyectar</button>
+          <p class="role-desc">Pantalla gigante para arrastrar al proyector o televisor. El público verá las cartas 3D, strikes, confeti y marcadores.</p>
+          <button class="btn-premium btn-cyan" style="padding: 10px 24px; font-size: 0.9rem; margin-top: 6px;">Proyectar</button>
         </div>
       </div>
     </div>
 
-    <p class="footer">Inspirado en Family Feud • Diseñado con ❤️ para la Iglesia</p>
+    <!-- Guía de 3 pasos -->
+    <div class="quick-guide-box">
+      <div class="guide-title">⚡ Cómo jugar en tu iglesia o reunión en 3 pasos:</div>
+      <div class="guide-steps">
+        <div class="step-card">
+          <div class="step-num">Paso 1</div>
+          Abre <strong>"Proyectar"</strong> en una ventana, arrástrala a tu proyector/TV y presiona <strong>F11</strong> (pantalla completa).
+        </div>
+        <div class="step-card">
+          <div class="step-num">Paso 2</div>
+          Abre <strong>"Consola Host"</strong> en la pantalla de tu laptop. Verás el indicador verde de conexión inmediata.
+        </div>
+        <div class="step-card">
+          <div class="step-num">Paso 3</div>
+          Haz un clic para desbloquear audio, selecciona tu primera pregunta ¡y que empiece la diversión familiar!
+        </div>
+      </div>
+    </div>
+
+    <p class="footer">🎙️ Inspirado en Family Feud • Diseñado con ❤️ para la edificación y gozo de las familias</p>
   </div>
 
   <script src="js/audio.js"></script>
   <script>
-    // Inicializar el contexto de sonido en la interacción del usuario
     document.addEventListener('click', () => {
       if (window.sounds) {
         window.sounds.init();
       }
-    });
+    }, { once: true });
 
     function openRole(url) {
       if (window.sounds) {
@@ -180,7 +260,7 @@
       }
       setTimeout(() => {
         window.location.href = url;
-      }, 300);
+      }, 260);
     }
   </script>
 </body>

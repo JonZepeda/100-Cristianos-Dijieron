@@ -488,18 +488,55 @@ const DEFAULT_QUESTIONS = [
   }
 ];
 
+// Sets de preguntas rápidas preconfiguradas para "Dinero Rápido"
+const DEFAULT_FAST_MONEY_SETS = [
+  {
+    id: "set-1",
+    name: "Set 1: Clásicos Cristianos",
+    questions: [
+      "1. Nombra un apóstol de Jesús.",
+      "2. Menciona algo que llevas a la iglesia además de tu Biblia.",
+      "3. Nombra un libro del Antiguo Testamento.",
+      "4. Menciona un animal que estuvo en el Arca de Noé.",
+      "5. Nombra un fruto del Espíritu Santo."
+    ]
+  },
+  {
+    id: "set-2",
+    name: "Set 2: Historias Bíblicas",
+    questions: [
+      "1. Nombra un personaje bíblico conocido por su fuerza.",
+      "2. Menciona una de las plagas de Egipto.",
+      "3. Nombra una mujer importante en la Biblia.",
+      "4. Menciona una razón para orar todos los días.",
+      "5. Nombra un monte sagrado en la Biblia."
+    ]
+  },
+  {
+    id: "set-3",
+    name: "Set 3: Vida en Comunidad y Familia",
+    questions: [
+      "1. Nombra una comida típica en un convivio de la iglesia.",
+      "2. Menciona una excusa común para llegar tarde al culto.",
+      "3. Nombra una canción o himno cristiano muy famoso.",
+      "4. Menciona algo que hace el pastor durante la semana.",
+      "5. Nombra un color del arcoíris que Dios puso como señal."
+    ]
+  }
+];
+
 // Inicializar base de datos en localStorage si no existe
 function getQuestions() {
   const stored = localStorage.getItem('cristianos_dijeron_questions');
   if (!stored) {
     localStorage.setItem('cristianos_dijeron_questions', JSON.stringify(DEFAULT_QUESTIONS));
-    return DEFAULT_QUESTIONS;
+    return JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
   }
   try {
     return JSON.parse(stored);
   } catch (e) {
     console.error("Error cargando preguntas del localStorage, usando por defecto", e);
-    return DEFAULT_QUESTIONS;
+    return JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
   }
 }
 
@@ -507,6 +544,35 @@ function saveQuestions(questions) {
   localStorage.setItem('cristianos_dijeron_questions', JSON.stringify(questions));
 }
 
-// Inicializar base de datos
+function resetToDefaultQuestions() {
+  localStorage.setItem('cristianos_dijeron_questions', JSON.stringify(DEFAULT_QUESTIONS));
+  window.gameQuestions = JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+  return window.gameQuestions;
+}
+
+function getCategories() {
+  const cats = new Set();
+  (window.gameQuestions || DEFAULT_QUESTIONS).forEach(q => {
+    if (q.category) cats.add(q.category);
+  });
+  return Array.from(cats).sort();
+}
+
+function exportQuestionsJSON() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.gameQuestions, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", "100_cristianos_preguntas.json");
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
+
+// Inicializar base de datos global
+window.DEFAULT_QUESTIONS = DEFAULT_QUESTIONS;
+window.DEFAULT_FAST_MONEY_SETS = DEFAULT_FAST_MONEY_SETS;
 window.gameQuestions = getQuestions();
+window.getCategories = getCategories;
+window.resetToDefaultQuestions = resetToDefaultQuestions;
+window.exportQuestionsJSON = exportQuestionsJSON;
 console.log("Base de datos de preguntas cargada con éxito.", window.gameQuestions.length, "preguntas disponibles.");
