@@ -1,4 +1,4 @@
-// BIBLIOTECA DE EFECTOS DE SONIDO - Web Audio API (Autocontenida, alta fidelidad)
+// BIBLIOTECA DE EFECTOS DE SONIDO - Web Audio API (Edición Broadcast TV Show)
 
 class SoundEffects {
   constructor() {
@@ -30,14 +30,13 @@ class SoundEffects {
     return this.isMuted ? 0 : this.masterVolume;
   }
 
-  /* 🔔 CAMPANA ARMÓNICA DE ACIERTO (Ding Chime) */
+  /* 🔔 CAMPANA ARMÓNICA DE ACIERTO (Ding Chime TV) */
   playCorrect() {
     this.init();
     const vol = this.getVolume();
     if (vol === 0) return;
 
     const now = this.ctx.currentTime;
-    // Campana de show de TV con armónicos brillantes
     const harmonics = [
       { freq: 783.99, type: 'triangle', gain: 0.28, dur: 0.8 }, // G5
       { freq: 1046.50, type: 'sine', gain: 0.32, dur: 1.0 },     // C6
@@ -63,7 +62,69 @@ class SoundEffects {
     });
   }
 
-  /* ❌ ZUMBADOR DE ERROR / STRIKE (Buzzer de Family Feud) */
+  /* ⚙️ SONIDO MECÁNICO DE PERSIANA SPLIT-FLAP (Clack-Flap) */
+  playMechanicalFlap() {
+    this.init();
+    const vol = this.getVolume();
+    if (vol === 0) return;
+
+    const now = this.ctx.currentTime;
+    // Ráfaga de clacks mecánicos como persiana de aeropuerto / panel de concurso
+    for (let i = 0; i < 4; i++) {
+      const flapTime = now + (i * 0.04);
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(320 - (i * 30), flapTime);
+
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(900 + (i * 120), flapTime);
+      filter.Q.setValueAtTime(2.5, flapTime);
+
+      gain.gain.setValueAtTime(0.22 * vol, flapTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, flapTime + 0.035);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(flapTime);
+      osc.stop(flapTime + 0.04);
+    }
+  }
+
+  /* ⚡ PULSADOR DE DUELO / FACE-OFF (Buzzer de Capitanes) */
+  playFaceOffBuzzer() {
+    this.init();
+    const vol = this.getVolume();
+    if (vol === 0) return;
+
+    const now = this.ctx.currentTime;
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(440, now);
+    osc2.type = 'square';
+    osc2.frequency.setValueAtTime(445, now); // Desafinación para zumbido de campana eléctrica
+
+    gain.gain.setValueAtTime(0.35 * vol, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.36);
+    osc2.stop(now + 0.36);
+  }
+
+  /* ❌ ZUMBADOR DE ERROR / STRIKE (Heavy TV Buzzer) */
   playWrong() {
     this.init();
     const vol = this.getVolume();
@@ -80,18 +141,18 @@ class SoundEffects {
     osc1.frequency.setValueAtTime(125, now);
 
     osc2.type = 'sawtooth';
-    osc2.frequency.setValueAtTime(129, now); // Ligera desafinación para aspereza cortante
+    osc2.frequency.setValueAtTime(129, now); // Aspereza cortante
 
     osc3.type = 'square';
-    osc3.frequency.setValueAtTime(63, now); // Sub-grave para contundencia en proyector
+    osc3.frequency.setValueAtTime(63, now); // Graves para golpe en auditorio
 
     filter.type = 'lowpass';
     filter.frequency.setValueAtTime(1400, now);
     filter.frequency.exponentialRampToValueAtTime(300, now + 0.65);
 
     gainNode.gain.setValueAtTime(0, now);
-    gainNode.gain.linearRampToValueAtTime(0.45 * vol, now + 0.02);
-    gainNode.gain.setValueAtTime(0.45 * vol, now + 0.45);
+    gainNode.gain.linearRampToValueAtTime(0.48 * vol, now + 0.02);
+    gainNode.gain.setValueAtTime(0.48 * vol, now + 0.45);
     gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
 
     osc1.connect(filter);
@@ -109,6 +170,63 @@ class SoundEffects {
     osc3.stop(now + 0.72);
   }
 
+  /* ⚠️ RESPUESTA REPETIDA EN DINERO RÁPIDO (Du-Dup) */
+  playRepeatAnswer() {
+    this.init();
+    const vol = this.getVolume();
+    if (vol === 0) return;
+
+    const now = this.ctx.currentTime;
+    [0, 0.14].forEach((delay, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(idx === 0 ? 330 : 260, now + delay);
+
+      gain.gain.setValueAtTime(0.35 * vol, now + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.12);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + delay);
+      osc.stop(now + delay + 0.13);
+    });
+  }
+
+  /* 🚨 ALERTA DRAMÁTICA DE ROBO DE PUNTOS (Steal Opportunity Sting) */
+  playStealAlert() {
+    this.init();
+    const vol = this.getVolume();
+    if (vol === 0) return;
+
+    const now = this.ctx.currentTime;
+    // Acorde disminuido tenso de show de televisión
+    const freqs = [220, 261.63, 311.13, 370.00]; // A3, C4, Eb4, F#4
+    freqs.forEach(f => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(f, now);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(900, now);
+      filter.frequency.linearRampToValueAtTime(400, now + 1.2);
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime((0.28 / freqs.length) * vol, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 1.25);
+    });
+  }
+
   /* 🎺 FANFARRIA DE CELEBRACIÓN Y VICTORIA (Grand Win Brass) */
   playWin() {
     this.init();
@@ -116,13 +234,12 @@ class SoundEffects {
     if (vol === 0) return;
 
     const now = this.ctx.currentTime;
-    // Acordes triunfales estilo metales de show
     const chords = [
-      { time: 0.0, freqs: [261.63, 329.63, 392.00], dur: 0.16 }, // C4 - E4 - G4
-      { time: 0.17, freqs: [261.63, 329.63, 392.00], dur: 0.16 }, // C4 - E4 - G4
-      { time: 0.34, freqs: [349.23, 440.00, 523.25], dur: 0.22 }, // F4 - A4 - C5
-      { time: 0.58, freqs: [392.00, 493.88, 587.33], dur: 0.26 }, // G4 - B4 - D5
-      { time: 0.88, freqs: [523.25, 659.25, 783.99, 1046.50], dur: 0.95 } // C5 - E5 - G5 - C6 Gran final
+      { time: 0.0, freqs: [261.63, 329.63, 392.00], dur: 0.16 },
+      { time: 0.17, freqs: [261.63, 329.63, 392.00], dur: 0.16 },
+      { time: 0.34, freqs: [349.23, 440.00, 523.25], dur: 0.22 },
+      { time: 0.58, freqs: [392.00, 493.88, 587.33], dur: 0.26 },
+      { time: 0.88, freqs: [523.25, 659.25, 783.99, 1046.50], dur: 1.1 }
     ];
 
     chords.forEach(chord => {
@@ -134,10 +251,10 @@ class SoundEffects {
 
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(2200, now + chord.time);
+        filter.frequency.setValueAtTime(2400, now + chord.time);
 
         g.gain.setValueAtTime(0, now + chord.time);
-        g.gain.linearRampToValueAtTime((0.15 / chord.freqs.length) * vol, now + chord.time + 0.02);
+        g.gain.linearRampToValueAtTime((0.20 / chord.freqs.length) * vol, now + chord.time + 0.02);
         g.gain.exponentialRampToValueAtTime(0.0008, now + chord.time + chord.dur);
 
         osc.connect(filter);
@@ -150,8 +267,8 @@ class SoundEffects {
     });
   }
 
-  /* ⏱️ RELOJ DE CRONÓMETRO (Tick normal o Urgente) */
-  playTick(urgent = false) {
+  /* ⏱️ TICK METRÓNOMO DE CRONÓMETRO */
+  playTick() {
     this.init();
     const vol = this.getVolume();
     if (vol === 0) return;
@@ -160,21 +277,20 @@ class SoundEffects {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    osc.type = urgent ? 'square' : 'sine';
-    osc.frequency.setValueAtTime(urgent ? 1200 : 750, now);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(440, now + 0.03);
 
-    const dur = urgent ? 0.08 : 0.04;
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime((urgent ? 0.22 : 0.12) * vol, now + 0.005);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+    gain.gain.setValueAtTime(0.25 * vol, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start(now);
-    osc.stop(now + dur + 0.01);
+    osc.stop(now + 0.04);
   }
 
-  /* 💨 WHOOSH DE APERTURA DE CARTA */
+  /* 💨 WHOOSH DE TRANSICIÓN */
   playWhoosh() {
     this.init();
     const vol = this.getVolume();
@@ -185,62 +301,24 @@ class SoundEffects {
     const filter = this.ctx.createBiquadFilter();
     const gain = this.ctx.createGain();
 
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(160, now);
-    osc.frequency.exponentialRampToValueAtTime(540, now + 0.22);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(480, now + 0.12);
 
     filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(400, now);
-    filter.Q.setValueAtTime(1.5, now);
+    filter.frequency.setValueAtTime(350, now);
+    filter.frequency.exponentialRampToValueAtTime(1200, now + 0.12);
 
     gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.18 * vol, now + 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    gain.gain.linearRampToValueAtTime(0.18 * vol, now + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
 
     osc.connect(filter);
     filter.connect(gain);
     gain.connect(this.ctx.destination);
+
     osc.start(now);
-    osc.stop(now + 0.26);
-  }
-
-  /* 🔢 SONIDO DE CONTEO / ROLLUP DE PUNTOS */
-  playCountBlip() {
-    this.init();
-    const vol = this.getVolume();
-    if (vol === 0) return;
-
-    const now = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(920, now);
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.06 * vol, now + 0.003);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.04);
-  }
-
-  playTone(freq, type, time, volume, duration) {
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, time);
-
-    gain.gain.setValueAtTime(volume * this.getVolume(), time);
-    gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc.start(time);
-    osc.stop(time + duration);
+    osc.stop(now + 0.18);
   }
 }
 

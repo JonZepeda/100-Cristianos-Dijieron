@@ -12,19 +12,19 @@
   <!-- Canvas para Confeti de Celebración -->
   <canvas id="confetti-canvas"></canvas>
 
-  <!-- Banner Flotante de Desbloqueo de Audio (si aún no se ha interactuado) -->
+  <!-- Banner Flotante de Desbloqueo de Audio -->
   <div class="audio-banner" id="audio-unlock-banner" onclick="unlockAudio()">
     <span>🔊 Haz clic en cualquier lugar para activar el sonido del Proyector</span>
   </div>
 
-  <!-- Contenedor Principal del Juego -->
+  <!-- Contenedor Principal del Escenario Broadcast -->
   <div class="board-layout">
     
     <!-- Encabezado / Logo e Información de Ronda -->
     <header class="board-header">
       <div class="logo-area">
-        <span class="logo-main">100 Cristianos</span>
-        <span class="logo-sub">Dijeron</span>
+        <span class="logo-main">100 CRISTIANOS</span>
+        <span class="logo-sub">DIJERON</span>
       </div>
 
       <div class="header-center-info">
@@ -44,45 +44,45 @@
       </div>
     </div>
 
-    <!-- Área Principal de Juego (Equipos + Tablero) -->
+    <!-- Área Principal de Juego (Podios + Tablero Central de Persianas) -->
     <main class="board-main">
       
-      <!-- Marcador y Podio Equipo A -->
+      <!-- Podio Equipo A (Azul Real) -->
       <section class="team-panel team-a" id="team-a-panel">
-        <div class="podium-glow"></div>
+        <div class="podium-spotlight"></div>
         <h2 class="team-name" id="team-a-name">GRUPO A</h2>
         <div class="score-box team-score-box">
-          <div class="score-val glowing-points" id="team-a-score">000</div>
+          <div class="score-val" id="team-a-score">000</div>
         </div>
         <div class="team-indicator" id="team-a-indicator">ESPERANDO</div>
         
-        <!-- Indicadores de Strikes en Podio -->
-        <div class="podium-strikes" id="team-a-strikes">
-          <span class="podium-x" id="team-a-x1">X</span>
-          <span class="podium-x" id="team-a-x2">X</span>
-          <span class="podium-x" id="team-a-x3">X</span>
+        <!-- 3 Lámparas Físicas de Strike -->
+        <div class="podium-strikes" id="team-a-strikes" title="Strikes acumulados">
+          <div class="strike-lamp" id="team-a-x1"><span class="podium-x">X</span></div>
+          <div class="strike-lamp" id="team-a-x2"><span class="podium-x">X</span></div>
+          <div class="strike-lamp" id="team-a-x3"><span class="podium-x">X</span></div>
         </div>
       </section>
 
-      <!-- Tablero Central de Respuestas (Persianas 3D) -->
+      <!-- Tablero Central de Respuestas (Persianas Split-Flap) -->
       <section class="board-cards-grid" id="board-cards-container">
         <!-- Generado dinámicamente en board.js -->
       </section>
 
-      <!-- Marcador y Podio Equipo B -->
+      <!-- Podio Equipo B (Rojo Carmín) -->
       <section class="team-panel team-b" id="team-b-panel">
-        <div class="podium-glow"></div>
+        <div class="podium-spotlight"></div>
         <h2 class="team-name" id="team-b-name">GRUPO B</h2>
         <div class="score-box team-score-box">
-          <div class="score-val glowing-points" id="team-b-score">000</div>
+          <div class="score-val" id="team-b-score">000</div>
         </div>
         <div class="team-indicator" id="team-b-indicator">ESPERANDO</div>
 
-        <!-- Indicadores de Strikes en Podio -->
-        <div class="podium-strikes" id="team-b-strikes">
-          <span class="podium-x" id="team-b-x1">X</span>
-          <span class="podium-x" id="team-b-x2">X</span>
-          <span class="podium-x" id="team-b-x3">X</span>
+        <!-- 3 Lámparas Físicas de Strike -->
+        <div class="podium-strikes" id="team-b-strikes" title="Strikes acumulados">
+          <div class="strike-lamp" id="team-b-x1"><span class="podium-x">X</span></div>
+          <div class="strike-lamp" id="team-b-x2"><span class="podium-x">X</span></div>
+          <div class="strike-lamp" id="team-b-x3"><span class="podium-x">X</span></div>
         </div>
       </section>
 
@@ -90,7 +90,7 @@
 
     <!-- Pregunta Gigante en la Parte Inferior -->
     <footer class="board-footer">
-      <div class="question-box glass-panel" id="question-text">
+      <div class="question-box" id="question-text">
         ¡Bienvenidos! Esperando inicio desde la Consola del Presentador...
       </div>
     </footer>
@@ -102,6 +102,24 @@
     <div class="strike-flash"></div>
     <div class="strikes-wrapper" id="strikes-wrapper">
       <!-- Generado dinámicamente con animación elástica -->
+    </div>
+  </div>
+
+  <!-- Overlay de Alerta: ¡OPORTUNIDAD DE ROBO! -->
+  <div class="steal-overlay" id="steal-overlay">
+    <div class="steal-badge">
+      <div class="steal-icon">🚨</div>
+      <h2 class="steal-title">¡OPORTUNIDAD DE ROBO!</h2>
+      <p class="steal-subtitle" id="steal-team-announcement">EQUIPO RIVAL TIENE UNA OPORTUNIDAD</p>
+    </div>
+  </div>
+
+  <!-- Overlay de Alerta: DUELO DE CAPITANES (Face-Off) -->
+  <div class="faceoff-overlay" id="faceoff-overlay">
+    <div class="faceoff-badge">
+      <div class="faceoff-icon">⚡</div>
+      <h2 class="faceoff-title">¡DUELO DE CAPITANES!</h2>
+      <p class="faceoff-subtitle" id="faceoff-winner-text">¡ATENTOS AL PULSADOR!</p>
     </div>
   </div>
 
@@ -170,7 +188,7 @@
     </div>
   </div>
 
-  <!-- Importamos la biblioteca de sonido y la lógica del tablero -->
+  <!-- Scripts -->
   <script src="js/audio.js"></script>
   <script src="js/board.js"></script>
 </body>

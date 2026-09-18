@@ -13,7 +13,7 @@
   <div class="host-container">
     
     <!-- Barra Superior de Control de Producción -->
-    <header class="host-header glass-panel">
+    <header class="host-header">
       <div class="header-title-area">
         <div class="host-title-badge">
           <h1>🎙️ Consola del Presentador</h1>
@@ -23,7 +23,6 @@
 
       <!-- Controles de Audio y Acciones Globales -->
       <div class="header-tools-area">
-        <!-- Control de Volumen Master -->
         <div class="volume-control-box">
           <button class="btn-mute" id="btn-mute-toggle" onclick="toggleHostMute()" title="Silenciar / Activar Audio">🔊</button>
           <input type="range" id="host-volume-slider" min="0" max="1" step="0.05" value="0.85" oninput="changeHostVolume(this.value)" title="Volumen Master">
@@ -33,7 +32,7 @@
           <button class="btn-tool" onclick="openHotkeysModal()" title="Ver Atajos de Teclado">⌨️ Atajos</button>
           <button class="btn-tool" onclick="triggerHostConfetti()" title="Lanzar Confeti al Proyector">🎉 Confeti</button>
           <button class="btn-premium btn-red" onclick="resetFullGame()">Reiniciar Todo</button>
-          <button class="btn-premium btn-cyan" onclick="openBoardTab()">Abrir Proyector</button>
+          <button class="btn-premium btn-blue" onclick="openBoardTab()">Abrir Proyector</button>
         </div>
       </div>
     </header>
@@ -41,14 +40,19 @@
     <!-- Fila 1: Control de Equipos y Puntuación Global -->
     <div class="host-row-two-cols">
       
-      <!-- Equipo A Control -->
-      <div class="host-card glass-panel team-control-card border-a" id="host-team-a-panel">
+      <!-- Equipo A Control (Azul Real) -->
+      <div class="host-card team-control-card border-a" id="host-team-a-panel">
         <div class="team-header-input">
           <input type="text" id="team-a-input-name" value="GRUPO A" onchange="syncState()">
           <button class="active-dot" id="dot-team-a" onclick="setActiveTeam('A')" title="Atajo: Tecla A">
             🟢 Turno <span class="hotkey-mini">A</span>
           </button>
         </div>
+
+        <!-- Botón de Pulsador de Duelo (Face-Off) -->
+        <button class="btn-faceoff-buzz btn-blue-buzz" onclick="triggerFaceOff('A')" title="Atajo: Tecla F1">
+          ⚡ Pulsador Capitán A [F1]
+        </button>
         
         <div class="score-modifier-row">
           <button class="btn-adjust" onclick="modifyScore('A', -10)">-10</button>
@@ -57,14 +61,15 @@
           <button class="btn-adjust btn-quick-add" onclick="modifyScore('A', 50)">+50</button>
         </div>
         
-        <button class="btn-assign-accumulated btn-cyan-fill" onclick="assignAccumulatedTo('A')" title="Atajo: Tecla Espacio (si Equipo A activo)">
-          Asignar Puntos de Ronda
+        <button class="btn-assign-accumulated btn-blue-fill" onclick="assignAccumulatedTo('A')" title="Atajo: Tecla Espacio (si Equipo A activo)">
+          🏆 Asignar Puntos de Ronda
         </button>
       </div>
 
-      <!-- Puntos de la Ronda y Multiplicador Central -->
-      <div class="host-card glass-panel round-settings-card">
-        <h3>PUNTOS DE RONDA</h3>
+      <!-- Puntos de la Ronda, Multiplicador y Estado de Concurso -->
+      <div class="host-card round-settings-card">
+        <div class="phase-indicator-badge" id="phase-badge">FASE: RONDA REGULAR</div>
+        <h3>PUNTOS EN JUEGO</h3>
         <div class="accumulated-pool-display" id="accumulated-display">000</div>
         
         <div class="settings-row">
@@ -81,14 +86,19 @@
         </div>
       </div>
 
-      <!-- Equipo B Control -->
-      <div class="host-card glass-panel team-control-card border-b" id="host-team-b-panel">
+      <!-- Equipo B Control (Rojo Carmín) -->
+      <div class="host-card team-control-card border-b" id="host-team-b-panel">
         <div class="team-header-input">
           <input type="text" id="team-b-input-name" value="GRUPO B" onchange="syncState()">
           <button class="active-dot" id="dot-team-b" onclick="setActiveTeam('B')" title="Atajo: Tecla B">
             🟢 Turno <span class="hotkey-mini">B</span>
           </button>
         </div>
+
+        <!-- Botón de Pulsador de Duelo (Face-Off) -->
+        <button class="btn-faceoff-buzz btn-red-buzz" onclick="triggerFaceOff('B')" title="Atajo: Tecla F2">
+          ⚡ Pulsador Capitán B [F2]
+        </button>
         
         <div class="score-modifier-row">
           <button class="btn-adjust" onclick="modifyScore('B', -10)">-10</button>
@@ -97,8 +107,8 @@
           <button class="btn-adjust btn-quick-add" onclick="modifyScore('B', 50)">+50</button>
         </div>
         
-        <button class="btn-assign-accumulated btn-magenta-fill" onclick="assignAccumulatedTo('B')" title="Atajo: Tecla Espacio (si Equipo B activo)">
-          Asignar Puntos de Ronda
+        <button class="btn-assign-accumulated btn-red-fill" onclick="assignAccumulatedTo('B')" title="Atajo: Tecla Espacio (si Equipo B activo)">
+          🏆 Asignar Puntos de Ronda
         </button>
       </div>
 
@@ -108,10 +118,10 @@
     <div class="host-row-main-deck">
       
       <!-- Panel de Control del Tablero (Pregunta y Respuestas) -->
-      <div class="host-card glass-panel active-game-card">
+      <div class="host-card active-game-card">
         <div class="card-header-actions">
           <div class="deck-title-wrap">
-            <h2>🎯 Juego en Curso</h2>
+            <h2>🎯 Tablero en Concurso</h2>
             <span class="deck-subtitle" id="active-category-pill">SIN CATEGORÍA</span>
           </div>
           
@@ -127,7 +137,7 @@
               <!-- Cargado dinámicamente desde database.js -->
             </select>
 
-            <button class="btn-premium btn-cyan btn-sm" onclick="loadSelectedQuestion()">Cargar</button>
+            <button class="btn-premium btn-blue btn-sm" onclick="loadSelectedQuestion()">Cargar</button>
             <button class="btn-premium btn-gold btn-sm" onclick="loadRandomQuestion()" title="Cargar pregunta al azar">🎲 Azar</button>
           </div>
         </div>
@@ -139,46 +149,65 @@
         <div class="host-answers-list-header">
           <span>RESPUESTA DE ENCUESTA</span>
           <span>PUNTOS</span>
-          <span>ACCIÓN [TECLA]</span>
+          <span>ACCIÓN EN JUEGO</span>
         </div>
         
         <div class="host-answers-list" id="host-answers-list-container">
-          <!-- Respuestas cargadas dinámicamente con botones de revelar -->
+          <!-- Respuestas cargadas dinámicamente con botones de acertar y destapar sin puntos -->
         </div>
       </div>
 
-      <!-- Panel Lateral de Acciones Rápidas (Strikes y Sonidos) -->
-      <div class="host-card glass-panel side-actions-card">
+      <!-- Panel Lateral de Acciones Rápidas (Strikes, Robo y Sonidos) -->
+      <div class="host-card side-actions-card">
+        
+        <!-- Control Inteligente de Strikes -->
         <div class="side-section-header">
-          <h3>❌ CONTROL DE STRIKES</h3>
-          <button class="btn-mini-clear" onclick="clearStrikesOnBoard()" title="Limpiar marcas de strike en podios">Limpiar</button>
+          <h3>❌ STRIKES Y CONTROL</h3>
+          <button class="btn-mini-clear" onclick="clearStrikesOnBoard()" title="Poner en 0 los strikes de los podios">Limpiar</button>
         </div>
         
         <div class="strikes-triggers">
-          <button class="btn-strike" onclick="triggerStrike(1)">
-            1 Strike (X) <span class="hotkey-tag">X</span>
+          <button class="btn-strike-main" onclick="addProgressiveStrike()" title="Atajo: Tecla X">
+            ❌ +1 STRIKE <span class="hotkey-tag">[X]</span>
           </button>
-          <button class="btn-strike" onclick="triggerStrike(2)">
-            2 Strikes (XX) <span class="hotkey-tag">Shift+X</span>
-          </button>
-          <button class="btn-strike" onclick="triggerStrike(3)">
-            3 Strikes (XXX) <span class="hotkey-tag">Alt+X</span>
-          </button>
+          <div class="strikes-indicators-live">
+            <span>Strikes Equipo Activo:</span>
+            <span class="live-strike-count" id="active-strike-display">0 / 3</span>
+          </div>
         </div>
 
-        <h3 style="margin-top: 22px;">🎵 EFECTOS DE SONIDO</h3>
+        <!-- Módulo de Oportunidad de Robo (Steal) -->
+        <div class="steal-control-box" id="steal-control-box">
+          <div class="steal-box-header">
+            <h4>🚨 ROBO DE PUNTOS</h4>
+            <span class="steal-status-pill" id="steal-status-pill">INACTIVO</span>
+          </div>
+          <div class="steal-actions-grid">
+            <button class="btn-steal-trigger" onclick="triggerManualStealMode()" title="Activar alerta de robo en el proyector">
+              Iniciar Robo [R]
+            </button>
+            <button class="btn-steal-win" onclick="resolveStealWin()" title="El equipo rival acertó y se roba la bolsa">
+              ✓ Robo Exitoso
+            </button>
+          </div>
+        </div>
+
+        <!-- Efectos de Sonido de TV Show -->
+        <h3 style="margin-top: 18px;">🎵 EFECTOS DE SONIDO</h3>
         <div class="sounds-grid">
-          <button class="btn-sound" onclick="playHostSound('correct')">🔔 Ding (Correcto)</button>
-          <button class="btn-sound btn-sound-wrong" onclick="playHostSound('wrong')">🔕 Buzzer (Error)</button>
-          <button class="btn-sound btn-sound-win" onclick="playHostSound('win')">🎺 Fanfarria (Victoria)</button>
-          <button class="btn-sound" onclick="playHostSound('tick')">⏱️ Reloj (Tick)</button>
-          <button class="btn-sound" onclick="playHostSound('whoosh')">💨 Whoosh (Carta)</button>
+          <button class="btn-sound" onclick="playHostSound('correct')">🔔 Campana</button>
+          <button class="btn-sound btn-sound-wrong" onclick="playHostSound('wrong')">🔕 Buzzer</button>
+          <button class="btn-sound btn-sound-win" onclick="playHostSound('win')">🎺 Fanfarria</button>
+          <button class="btn-sound" onclick="playHostSound('faceoff_buzzer')">⚡ Pulsador</button>
+          <button class="btn-sound" onclick="playHostSound('mechanical_flap')">⚙️ Persiana</button>
+          <button class="btn-sound" onclick="playHostSound('steal_alert')">🚨 Alerta Robo</button>
+          <button class="btn-sound" onclick="playHostSound('tick')">⏱️ Reloj</button>
           <button class="btn-sound btn-sound-confetti" onclick="triggerHostConfetti()">🎉 Confeti</button>
         </div>
 
-        <h3 style="margin-top: 22px;">📋 GESTIÓN DE PREGUNTAS</h3>
+        <h3 style="margin-top: 18px;">📋 GESTIÓN DE PREGUNTAS</h3>
         <div class="db-actions-quick">
-          <button class="btn-sound btn-gold" onclick="openDatabaseEditor()" style="width: 100%; border-radius: 8px; color: #000; font-weight: 800;">
+          <button class="btn-sound btn-gold-solid" onclick="openDatabaseEditor()">
             Editor de Preguntas (<span id="total-q-count">0</span>)
           </button>
         </div>
@@ -187,14 +216,13 @@
     </div>
 
     <!-- Fila 3: MÓDULO DE DINERO RÁPIDO (FAST MONEY) -->
-    <div class="host-card glass-panel fast-money-control-panel">
+    <div class="host-card fast-money-control-panel">
       <div class="fast-header">
         <div class="fast-header-left">
           <h2>💰 Consola de "Dinero Rápido"</h2>
-          <span class="fast-badge-status">Ronda Final</span>
+          <span class="fast-badge-status">Ronda Final (Meta: 200 Pts)</span>
         </div>
 
-        <!-- Selector de Paquete de Preguntas para Dinero Rápido -->
         <div class="fast-set-selector-wrap">
           <label>Guion de Preguntas:</label>
           <select id="fast-set-select" onchange="onFastSetChange()">
@@ -203,9 +231,9 @@
         </div>
 
         <div class="fast-actions">
-          <button class="btn-premium btn-magenta" onclick="toggleFastMoneyBoard(true)">Mostrar en Proyector</button>
+          <button class="btn-premium btn-blue" onclick="toggleFastMoneyBoard(true)">Mostrar en Proyector</button>
           <button class="btn-premium btn-red" onclick="toggleFastMoneyBoard(false)">Ocultar en Proyector</button>
-          <button class="btn-premium btn-gold" onclick="resetFastMoneyState()" style="color: #000;">Reiniciar Dinero Rápido</button>
+          <button class="btn-premium btn-gold" onclick="resetFastMoneyState()">Reiniciar Dinero Rápido</button>
         </div>
       </div>
 
@@ -216,10 +244,13 @@
 
       <div class="fast-timer-controls">
         <div class="timer-display-host" id="fast-timer-display">20 s</div>
-        <button class="btn-timer btn-start-t" onclick="startFastTimer(20)">Iniciar Reloj (20s)</button>
-        <button class="btn-timer btn-start-t" onclick="startFastTimer(25)" style="background: var(--accent-magenta);">Iniciar Reloj (25s)</button>
+        <button class="btn-timer btn-start-t" onclick="startFastTimer(20)">Iniciar J1 (20s)</button>
+        <button class="btn-timer btn-start-t btn-timer-j2" onclick="startFastTimer(25)">Iniciar J2 (25s)</button>
         <button class="btn-timer btn-stop-t" onclick="stopFastTimer()">Pausar Reloj</button>
         <button class="btn-timer btn-reset-t" onclick="resetFastTimer()">Reiniciar Reloj</button>
+        <button class="btn-timer btn-repeat-alert" onclick="triggerRepeatAnswerAlert()" title="Tocar sonido de respuesta duplicada">
+          ⚠️ Respuesta Repetida [D]
+        </button>
       </div>
 
       <div class="fast-players-host-inputs">
@@ -253,7 +284,7 @@
 
   <!-- MODAL: EDITOR DE PREGUNTAS (CREACIÓN DINÁMICA, EXPORT/IMPORT) -->
   <div class="db-editor-modal" id="db-editor-modal">
-    <div class="db-editor-content glass-panel-heavy">
+    <div class="db-editor-content">
       <div class="db-editor-header">
         <h2>📚 Base de Datos y Gestor de Preguntas</h2>
         <button class="btn-close-modal" onclick="closeDatabaseEditor()">✖</button>
@@ -287,7 +318,7 @@
             <!-- Filas dinámicas de respuestas -->
           </div>
           
-          <button class="btn-premium btn-cyan" onclick="saveNewQuestion()" style="width: 100%; margin-top: 15px;">Guardar Pregunta en Base de Datos</button>
+          <button class="btn-premium btn-blue" onclick="saveNewQuestion()" style="width: 100%; margin-top: 15px;">Guardar Pregunta en Base de Datos</button>
         </div>
 
         <hr class="editor-divider">
@@ -323,26 +354,27 @@
 
   <!-- MODAL: GUÍA DE ATAJOS DE TECLADO (HOTKEYS) -->
   <div class="db-editor-modal" id="hotkeys-modal">
-    <div class="db-editor-content glass-panel-heavy" style="max-width: 580px;">
+    <div class="db-editor-content" style="max-width: 620px;">
       <div class="db-editor-header">
         <h2>⌨️ Atajos de Teclado para el Show en Vivo</h2>
         <button class="btn-close-modal" onclick="closeHotkeysModal()">✖</button>
       </div>
       <div class="hotkeys-modal-body">
-        <div class="hotkey-entry"><span class="key-badge">1 - 8</span><span>Revelar Respuesta 1 a 8 en el proyector</span></div>
-        <div class="hotkey-entry"><span class="key-badge">X</span><span>Disparar 1 Strike (X) con zumbador</span></div>
-        <div class="hotkey-entry"><span class="key-badge">Shift + X</span><span>Disparar 2 Strikes (XX)</span></div>
-        <div class="hotkey-entry"><span class="key-badge">Alt + X</span><span>Disparar 3 Strikes (XXX)</span></div>
-        <div class="hotkey-entry"><span class="key-badge">A</span><span>Activar turno del GRUPO A</span></div>
-        <div class="hotkey-entry"><span class="key-badge">B</span><span>Activar turno del GRUPO B</span></div>
-        <div class="hotkey-entry"><span class="key-badge">Espacio</span><span>Asignar puntos de la ronda al equipo en turno</span></div>
+        <div class="hotkey-entry"><span class="key-badge">1 - 8</span><span>Acierto: Revelar Respuesta 1 a 8 (+Puntos a la bolsa)</span></div>
+        <div class="hotkey-entry"><span class="key-badge">Alt + 1-8</span><span>Destapar respuesta faltante por curiosidad (Sin Puntos)</span></div>
+        <div class="hotkey-entry"><span class="key-badge">X</span><span>+1 Strike progresivo (en el 3ero activa Robo de Puntos)</span></div>
+        <div class="hotkey-entry"><span class="key-badge">F1 / F2</span><span>Pulsador de Duelo Capitán A / Capitán B</span></div>
+        <div class="hotkey-entry"><span class="key-badge">A / B</span><span>Activar turno del GRUPO A / GRUPO B</span></div>
+        <div class="hotkey-entry"><span class="key-badge">R</span><span>Activar / Desactivar alerta de Robo de Puntos</span></div>
+        <div class="hotkey-entry"><span class="key-badge">Espacio</span><span>Asignar puntos acumulados al equipo en turno</span></div>
+        <div class="hotkey-entry"><span class="key-badge">D</span><span>Alerta de Respuesta Repetida (Dinero Rápido)</span></div>
         <div class="hotkey-entry"><span class="key-badge">M</span><span>Silenciar / Activar audio general</span></div>
         <div class="hotkey-entry"><span class="key-badge">C</span><span>Lanzar lluvia de confeti en el proyector</span></div>
       </div>
     </div>
   </div>
 
-  <!-- Cargamos bases de datos y scripts de control -->
+  <!-- Scripts -->
   <script src="js/audio.js"></script>
   <script src="js/database.js"></script>
   <script src="js/host.js"></script>

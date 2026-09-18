@@ -17,55 +17,58 @@
       text-align: center;
       position: relative;
       z-index: 2;
+      background: radial-gradient(circle at 50% 30%, #151d3b 0%, #080c1a 70%, #03050a 100%);
     }
 
     .title-area {
       margin-bottom: 25px;
     }
 
-    .logo-glow {
+    .logo-broadcast {
       font-family: var(--font-display);
-      font-weight: 950;
-      font-size: clamp(2.8rem, 9vw, 5.2rem);
+      font-weight: 900;
+      font-size: clamp(2.8rem, 8vw, 5.2rem);
       text-transform: uppercase;
-      letter-spacing: -2px;
-      background: linear-gradient(135deg, #00f0ff 0%, #ffd000 50%, #ff007f 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+      color: #ffffff;
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.9);
       margin-bottom: 4px;
-      filter: drop-shadow(0 4px 25px rgba(0, 240, 255, 0.35));
-      animation: pulse-glow 3.5s infinite alternate;
     }
 
     .sub-logo {
       font-family: var(--font-display);
       font-size: clamp(1.2rem, 3.5vw, 2.2rem);
       font-weight: 800;
-      color: var(--accent-gold);
+      color: var(--gold-bright);
       text-transform: uppercase;
       letter-spacing: 6px;
-      text-shadow: var(--glow-gold);
+      text-shadow: 0 2px 10px rgba(245, 158, 11, 0.4);
     }
 
     .selection-box {
       width: 100%;
-      max-width: 720px;
-      padding: 40px 35px;
-      margin-bottom: 30px;
+      max-width: 760px;
+      padding: 35px;
+      margin-bottom: 25px;
+      background: #0d142b;
+      border: 2px solid var(--border-stage-metallic);
+      border-radius: 22px;
+      box-shadow: var(--shadow-stage-card);
     }
 
     .selection-title {
       font-family: var(--font-display);
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 800;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
       color: #fff;
+      letter-spacing: 0.5px;
     }
 
     .role-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 22px;
     }
 
     @media (min-width: 640px) {
@@ -75,48 +78,47 @@
     }
 
     .role-card {
-      padding: 35px 24px;
-      background: rgba(255, 255, 255, 0.025);
-      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      padding: 32px 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid var(--border-stage-subtle);
       border-radius: 18px;
       cursor: pointer;
       transition: all var(--transition-medium);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       position: relative;
-      overflow: hidden;
     }
 
     .role-card:hover {
-      background: rgba(255, 255, 255, 0.06);
-      transform: translateY(-6px);
+      background: rgba(255, 255, 255, 0.07);
+      transform: translateY(-5px);
     }
 
     .role-card.presenter:hover {
-      border-color: var(--accent-magenta);
-      box-shadow: 0 14px 35px rgba(255, 0, 127, 0.25), var(--shadow-card);
+      border-color: var(--gold-warm);
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.3);
     }
 
     .role-card.projector:hover {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 14px 35px rgba(0, 240, 255, 0.25), var(--shadow-card);
+      border-color: var(--team-a-bright);
+      box-shadow: 0 12px 30px rgba(59, 130, 246, 0.3);
     }
 
     .role-icon {
-      font-size: 3.5rem;
+      font-size: 3.4rem;
       transition: transform var(--transition-medium);
     }
 
     .role-card:hover .role-icon {
-      transform: scale(1.18) rotate(4deg);
+      transform: scale(1.15);
     }
 
     .role-name {
       font-family: var(--font-display);
       font-weight: 900;
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
@@ -130,10 +132,10 @@
     /* Guía rápida de 3 pasos */
     .quick-guide-box {
       width: 100%;
-      max-width: 720px;
-      padding: 24px;
-      background: rgba(10, 14, 32, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      max-width: 760px;
+      padding: 22px 25px;
+      background: #090e1f;
+      border: 1px solid var(--border-stage-subtle);
       border-radius: 16px;
       margin-bottom: 25px;
       text-align: left;
@@ -142,12 +144,9 @@
     .guide-title {
       font-family: var(--font-display);
       font-weight: 800;
-      font-size: 1.05rem;
-      color: var(--accent-gold);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 1rem;
+      color: var(--gold-bright);
+      margin-bottom: 12px;
     }
 
     .guide-steps {
@@ -168,15 +167,15 @@
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.04);
       font-size: 0.82rem;
-      color: var(--text-bright);
+      color: var(--text-secondary);
       line-height: 1.4;
     }
 
     .step-num {
       font-family: var(--font-display);
       font-weight: 900;
-      color: var(--accent-cyan);
-      font-size: 1rem;
+      color: var(--gold-bright);
+      font-size: 0.95rem;
       margin-bottom: 4px;
     }
 
@@ -184,42 +183,33 @@
       font-size: 0.85rem;
       color: var(--text-muted);
     }
-
-    @keyframes pulse-glow {
-      0% {
-        filter: drop-shadow(0 4px 15px rgba(0, 240, 255, 0.3));
-      }
-      100% {
-        filter: drop-shadow(0 4px 35px rgba(255, 0, 127, 0.5));
-      }
-    }
   </style>
 </head>
 <body>
   <div class="welcome-container">
     <div class="title-area">
-      <h1 class="logo-glow">100 Cristianos</h1>
-      <h2 class="sub-logo">Dijeron</h2>
+      <h1 class="logo-broadcast">100 CRISTIANOS</h1>
+      <h2 class="sub-logo">DIJERON</h2>
     </div>
     
-    <div class="selection-box glass-panel-heavy">
+    <div class="selection-box">
       <h3 class="selection-title">Selecciona el modo de pantalla para iniciar</h3>
       
       <div class="role-grid">
         <!-- Tarjeta del Presentador -->
         <div class="role-card presenter" onclick="openRole('host.html')">
           <div class="role-icon">🎙️</div>
-          <div class="role-name" style="color: var(--accent-magenta);">Presentador</div>
-          <p class="role-desc">Consola de Control para tu laptop o tablet. Controla preguntas, respuestas, atajos rápidos de teclado y strikes.</p>
-          <button class="btn-premium btn-magenta" style="padding: 10px 24px; font-size: 0.9rem; margin-top: 6px;">Consola Host</button>
+          <div class="role-name" style="color: var(--gold-bright);">Presentador</div>
+          <p class="role-desc">Consola Switcher para tu laptop o tablet. Controla preguntas, respuestas, pulsadores de duelo, strikes y robo.</p>
+          <button class="btn-premium" style="background: var(--gold-warm); color: #0f172a; padding: 10px 24px; font-size: 0.9rem; margin-top: 6px;">Consola Host</button>
         </div>
 
         <!-- Tarjeta de Proyección -->
         <div class="role-card projector" onclick="openRole('board.html')">
           <div class="role-icon">🖥️</div>
-          <div class="role-name" style="color: var(--accent-cyan);">Tablero</div>
-          <p class="role-desc">Pantalla gigante para arrastrar al proyector o televisor. El público verá las cartas 3D, strikes, confeti y marcadores.</p>
-          <button class="btn-premium btn-cyan" style="padding: 10px 24px; font-size: 0.9rem; margin-top: 6px;">Proyectar</button>
+          <div class="role-name" style="color: #60a5fa;">Tablero</div>
+          <p class="role-desc">Pantalla gigante para proyector o televisor. El público verá las persianas split-flap, podios de equipo, strikes y confeti.</p>
+          <button class="btn-premium btn-blue" style="padding: 10px 24px; font-size: 0.9rem; margin-top: 6px;">Proyectar</button>
         </div>
       </div>
     </div>
